@@ -8,6 +8,6 @@ dependencies {
 
 multiloader {
     mixins {
-        mixin("GrindstoneMenu\$SlotMixin", "GrindstoneMenuMixin", "ItemStackMixin")
+        mixin("EnchantmentHelperMixin", "GrindstoneMenu\$SlotMixin", "GrindstoneMenuMixin", "ItemStackMixin")
     }
 }
