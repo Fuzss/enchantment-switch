@@ -1,8 +1,8 @@
 package fuzs.enchantmentswitch.neoforge;
 
-import fuzs.enchantmentswitch.EnchantmentSwitch;
-import fuzs.enchantmentswitch.data.tags.ModEnchantmentTagProvider;
-import fuzs.enchantmentswitch.data.tags.ModItemTagProvider;
+import fuzs.enchantmentswitch.common.EnchantmentSwitch;
+import fuzs.enchantmentswitch.common.data.tags.ModEnchantmentTagProvider;
+import fuzs.enchantmentswitch.common.data.tags.ModItemTagProvider;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import net.neoforged.fml.common.Mod;

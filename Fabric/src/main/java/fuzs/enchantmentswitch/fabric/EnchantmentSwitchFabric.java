@@ -1,6 +1,6 @@
 package fuzs.enchantmentswitch.fabric;
 
-import fuzs.enchantmentswitch.EnchantmentSwitch;
+import fuzs.enchantmentswitch.common.EnchantmentSwitch;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import net.fabricmc.api.ModInitializer;
 
