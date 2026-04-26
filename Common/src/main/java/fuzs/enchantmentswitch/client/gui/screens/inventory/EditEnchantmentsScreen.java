@@ -1,21 +1,22 @@
 package fuzs.enchantmentswitch.client.gui.screens.inventory;
 
 import fuzs.enchantmentswitch.EnchantmentSwitch;
-import fuzs.enchantmentswitch.client.gui.components.AbstractMenuSelectionList;
 import fuzs.enchantmentswitch.client.gui.components.ClickableEnchantmentButton;
 import fuzs.enchantmentswitch.client.util.EnchantmentTooltipHelper;
 import fuzs.enchantmentswitch.init.ModRegistry;
 import fuzs.enchantmentswitch.network.client.ServerboundSetEnchantmentsMessage;
-import fuzs.puzzleslib.api.client.gui.v2.ScreenHelper;
-import fuzs.puzzleslib.api.client.gui.v2.components.SpritelessImageButton;
-import fuzs.puzzleslib.api.client.gui.v2.tooltip.ClientComponentSplitter;
-import fuzs.puzzleslib.api.client.gui.v2.tooltip.TooltipRenderHelper;
-import fuzs.puzzleslib.api.client.key.v1.KeyMappingHelper;
-import fuzs.puzzleslib.api.network.v4.MessageSender;
+import fuzs.puzzleslib.common.api.client.gui.v2.ScreenHelper;
+import fuzs.puzzleslib.common.api.client.gui.v2.components.AbstractMenuSelectionList;
+import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.ClientComponentSplitter;
+import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.TooltipRenderHelper;
+import fuzs.puzzleslib.common.api.client.key.v1.KeyMappingHelper;
+import fuzs.puzzleslib.common.api.network.v4.MessageSender;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.input.KeyEvent;
@@ -43,6 +44,8 @@ import java.util.Objects;
 public class EditEnchantmentsScreen extends Screen {
     public static final Component COMPONENT_EDIT_ENCHANTMENTS = Component.translatable("enchantments.edit");
     public static final Identifier EDIT_ENCHANTMENTS_TEXTURE = EnchantmentSwitch.id("textures/gui/enchantments.png");
+    public static final WidgetSprites CLOSE_BUTTON_SPRITES = new WidgetSprites(EnchantmentSwitch.id(
+            "enchantments/close_button"), EnchantmentSwitch.id("enchantments/close_button_highlighted"));
     private static final Identifier TEXT_FIELD_SPRITE = Identifier.withDefaultNamespace("container/anvil/text_field");
     private static final Identifier TEXT_FIELD_DISABLED_SPRITE = Identifier.withDefaultNamespace(
             "container/anvil/text_field_disabled");
@@ -59,7 +62,6 @@ public class EditEnchantmentsScreen extends Screen {
     public int imageHeight = 166;
     public int leftPos;
     public int topPos;
-    private EditBox name;
     private EnchantmentSelectionList scrollingList;
     private List<? extends ClientTooltipComponent> itemTooltip;
 
@@ -80,29 +82,29 @@ public class EditEnchantmentsScreen extends Screen {
     protected void init() {
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.topPos = (this.height - this.imageHeight) / 2;
-        this.addRenderableWidget(new SpritelessImageButton(this.leftPos + this.imageWidth - 3 - 26 + 5,
+        this.addRenderableWidget(new ImageButton(this.leftPos + this.imageWidth - 3 - 26 + 5,
                 this.topPos - 23 + 5,
                 16,
                 16,
-                this.imageWidth + 5,
-                5,
-                16 + 7,
-                EDIT_ENCHANTMENTS_TEXTURE,
-                256,
-                256,
+                CLOSE_BUTTON_SPRITES,
                 (Button button) -> {
                     this.onClose();
                 }));
-        this.name = new EditBox(this.font, this.leftPos + 62, this.topPos + 24, 103, 12, COMPONENT_EDIT_ENCHANTMENTS);
-        this.name.setFocused(false);
-        this.name.setTextColor(-1);
-        this.name.setTextColorUneditable(-1);
-        this.name.setInvertHighlightedTextColor(false);
-        this.name.setBordered(false);
-        this.name.setMaxLength(50);
-        this.name.setValue(this.itemStack.getHoverName().getString());
-        this.name.setEditable(false);
-        this.addRenderableOnly(this.name);
+        EditBox name = new EditBox(this.font,
+                this.leftPos + 62,
+                this.topPos + 24,
+                103,
+                12,
+                COMPONENT_EDIT_ENCHANTMENTS);
+        name.setFocused(false);
+        name.setTextColor(-1);
+        name.setTextColorUneditable(-1);
+        name.setInvertHighlightedTextColor(false);
+        name.setBordered(false);
+        name.setMaxLength(50);
+        name.setValue(this.itemStack.getHoverName().getString());
+        name.setEditable(false);
+        this.addRenderableOnly(name);
         this.scrollingList = new EnchantmentSelectionList(this.leftPos + 18, this.topPos + 64);
         this.addRenderableWidget(this.scrollingList);
         this.refreshScrollingList();
@@ -155,12 +157,12 @@ public class EditEnchantmentsScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.drawString(this.font, this.title, this.leftPos + 62, this.topPos + 8, 0xFF404040, false);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        guiGraphics.text(this.font, this.title, this.leftPos + 62, this.topPos + 8, 0xFF404040, false);
         guiGraphics.pose().pushMatrix();
         guiGraphics.pose().scale(2.0F, 2.0F);
-        guiGraphics.renderFakeItem(this.itemStack, (this.leftPos + 17) / 2, (this.topPos + 8) / 2);
+        guiGraphics.fakeItem(this.itemStack, (this.leftPos + 17) / 2, (this.topPos + 8) / 2);
         guiGraphics.pose().popMatrix();
         if (this.itemTooltip != null && ScreenHelper.isHovering(this.leftPos + 17,
                 this.topPos + 8,
@@ -173,8 +175,13 @@ public class EditEnchantmentsScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderTransparentBackground(guiGraphics);
+    public boolean isInGameUi() {
+        return true;
+    }
+
+    @Override
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 EDIT_ENCHANTMENTS_TEXTURE,
                 this.leftPos,
@@ -261,7 +268,12 @@ public class EditEnchantmentsScreen extends Screen {
     private class EnchantmentSelectionList extends AbstractMenuSelectionList<EnchantmentSelectionList.Entry> {
 
         public EnchantmentSelectionList(int x, int y) {
-            super(EditEnchantmentsScreen.this.minecraft, x, y, 126, 90, 20, 9);
+            super(EditEnchantmentsScreen.this.minecraft, x, y, 126, 90, 20);
+        }
+
+        @Override
+        protected int scrollBarX() {
+            return this.getRowRight() + 9;
         }
 
         class Entry extends AbstractMenuSelectionList.Entry<Entry> {
