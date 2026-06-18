@@ -239,7 +239,7 @@ public class EditEnchantmentsScreen extends Screen {
                     this.storedEnchantments.keySet()));
         }
 
-        this.minecraft.setScreen(this.lastScreen);
+        this.minecraft.gui.setScreen(this.lastScreen);
     }
 
     @Override

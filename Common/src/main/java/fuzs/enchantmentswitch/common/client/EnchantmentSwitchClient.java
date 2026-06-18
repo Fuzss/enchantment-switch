@@ -26,7 +26,7 @@ public class EnchantmentSwitchClient implements ClientModConstructor {
 
     private static void registerEventHandlers() {
         ItemTooltipCallback.EVENT.register(StoredEnchantmentsTooltipHandler::onItemTooltip);
-        ScreenEvents.afterRender(AbstractContainerScreen.class).register(SlotOverlayHandler::onAfterRender);
+        ScreenEvents.afterExtract(AbstractContainerScreen.class).register(SlotOverlayHandler::onAfterExtract);
         RenderTooltipCallback.EVENT.register(SlotOverlayHandler::onRenderTooltip);
         ClientTickEvents.END.register(SlotOverlayHandler::onEndClientTick);
     }
