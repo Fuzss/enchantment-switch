@@ -5,11 +5,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "1368895",
-    "distributions.curseforge.slug": "enchantment-switch",
-    "distributions.github.slug": "enchantment-switch",
-    "distributions.modrinth.id": "k0wqURes",
-    "distributions.modrinth.slug": "enchantment-switch"
+  "distributions": {
+    "curseforge": {
+      "id": "1368895",
+      "slug": "enchantment-switch"
+    },
+    "github": {
+      "slug": "enchantment-switch"
+    },
+    "modrinth": {
+      "id": "k0wqURes",
+      "slug": "enchantment-switch"
+    }
   }
 }
